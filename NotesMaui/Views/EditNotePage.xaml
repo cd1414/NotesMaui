@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="NotesMaui.Views.EditNotePage">
+    <Grid
+        Padding="15"
+        RowDefinitions="auto,auto,*,*"
+        RowSpacing="15">
+
+        <!-- Toolbar -->
+        <HorizontalStackLayout HorizontalOptions="End" Spacing="5">
+            <Button Text="Undo"/>
+            <Button Text="Redo"/>
+        </HorizontalStackLayout>
+
+        <!--Header-->
+
+        <StackLayout Grid.Row="1">
+            <Label FontSize="Title"
+                   Text="MVVM"/>
+            <Label FontSize="Micro"
+                   Text="Wednesday, 28 February 2024 10:00 A.M."/>
+        </StackLayout>
+
+        <!--Body-->
+        <StackLayout Grid.Row="2">
+            <Label Text="Model View ViewModel (MVVM) is a pattern that pattern helps cleanly separate an application's business and presentation logic from its user interface (UI)."/>
+        </StackLayout>
+
+        <!--Footer-->
+        <StackLayout Grid.Row="3" Spacing="10" VerticalOptions="End">
+            <Button Text="Save"/>
+            <Button Text="Cancel"/>
+        </StackLayout>
+    </Grid>
+</ContentPage>
