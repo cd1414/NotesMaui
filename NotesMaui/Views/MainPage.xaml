@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="NotesMaui.Views.MainPage">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Spacing="25"
+            Padding="20,20"
+            VerticalOptions="Fill">
+
+            <Grid ColumnDefinitions="3*,*,*" >
+                <Label
+                    Grid.Column="0"
+                    Text="My Notes"
+                    FontSize="Title"
+                    VerticalOptions="Center"/>
+
+                <Label
+                    Grid.Column="1"
+                    Text="Christian"
+                    VerticalTextAlignment="Center"/>
+
+
+                <toolkit:AvatarView
+                    Grid.Column="2"
+                    ImageSource="dotnet_bot.png"
+                    VerticalOptions="Center"
+                    />
+            </Grid>
+
+            <SearchBar Placeholder="Search your notes..." BackgroundColor="Transparent"/>
+
+                <CollectionView
+                    x:Name="lstNotes"
+                    SelectionMode="Single"
+                    SelectionChanged="lstNotes_SelectionChanged">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" Span="2" HorizontalItemSpacing="15" VerticalItemSpacing="15"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Grid.Row="0" Grid.Column="0"
+                                StrokeShape="RoundRectangle 10"
+                                Padding="15">
+                            <Grid RowDefinitions="*,*,10" RowSpacing="15">
+                                 <Label Grid.Row="0" LineBreakMode="WordWrap" FontSize="Medium" Text="Change by Design"/>
+                                 <Label Grid.Row="1" LineBreakMode="WordWrap" Text="How design thinking transforms organization and inspires innovatio..."/>
+                                 <Label Grid.Row="2" FontSize="Micro" Text="Wed. 28 Feb" HorizontalOptions="End" VerticalOptions="End"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
+
