@@ -1,5 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
 using CommunityToolkit.Maui;
+using NotesMaui.Services;
+using NotesMaui.ViewModels;
+using NotesMaui.Views;
 
 namespace NotesMaui;
 public static class MauiProgram
@@ -16,6 +19,13 @@ public static class MauiProgram
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
+        builder.Services.AddTransient<MainPage>();
+        builder.Services.AddTransient<EditNotePage>();
+
+        builder.Services.AddSingleton<INoteService, NoteService>();
+        builder.Services.AddSingleton<EditNoteViewModel>();
+        builder.Services.AddSingleton<NoteViewModel>();
+
         return builder.Build();
     }
 }

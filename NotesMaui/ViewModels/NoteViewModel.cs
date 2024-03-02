@@ -12,18 +12,18 @@ namespace NotesMaui.ViewModels
         [ObservableProperty]
         private ObservableCollection<Note> notes;
 
-        private NotesService notesService;
+        private INoteService notesService;
 
-        public NoteViewModel()
+        public NoteViewModel(INoteService _noteService)
         {
-            notesService = new NotesService();
+            notesService = _noteService;
             LoadNotes();
         }
 
         [RelayCommand]
         void LoadNotes()
         {
-            Notes = new ObservableCollection<Note>(notesService.GetAllNotes());
+            Notes = new ObservableCollection<Note>(notesService.GetAll());
         }
 
         [RelayCommand]

@@ -1,7 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:NotesMaui.ViewModels"
+             xmlns:conv="clr-namespace:NotesMaui.Converters"
+             x:DataType="vm:EditNoteViewModel"
              x:Class="NotesMaui.Views.EditNotePage">
+
+    <ContentPage.Resources>
+        <conv:DateConverter x:Key="dateConv"/>
+    </ContentPage.Resources>
+
     <Grid
         Padding="15"
         RowDefinitions="auto,auto,*,*"
@@ -17,14 +25,14 @@
 
         <StackLayout Grid.Row="1">
             <Editor FontSize="Title"
-                   Text="MVVM"/>
+                   Text="{Binding CurrentNote.Title}"/>
             <Label FontSize="Micro"
-                   Text="Wednesday, 28 February 2024 10:00 A.M."/>
+                   Text="{Binding CurrentNote.LastUpdateDate, Converter={StaticResource dateConv},ConverterParameter=D}"/>
         </StackLayout>
 
         <!--Body-->
         <StackLayout Grid.Row="2">
-            <Editor Text="Model View ViewModel (MVVM) is a pattern that pattern helps cleanly separate an application's business and presentation logic from its user interface (UI)."/>
+            <Editor Text="{Binding CurrentNote.Content}"/>
         </StackLayout>
 
         <!--Footer-->
