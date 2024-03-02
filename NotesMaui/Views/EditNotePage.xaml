@@ -9,14 +9,14 @@
 
         <!-- Toolbar -->
         <HorizontalStackLayout HorizontalOptions="End" Spacing="5">
-            <Button Text="Undo"/>
-            <Button Text="Redo"/>
+            <Button FontFamily="Icons" Text="&#xE800;" BackgroundColor="Transparent" TextColor="Black" />
+            <Button FontFamily="Icons" Text="&#xE801;" BackgroundColor="Transparent" TextColor="Black"/>
         </HorizontalStackLayout>
 
         <!--Header-->
 
         <StackLayout Grid.Row="1">
-            <Label FontSize="Title"
+            <Editor FontSize="Title"
                    Text="MVVM"/>
             <Label FontSize="Micro"
                    Text="Wednesday, 28 February 2024 10:00 A.M."/>
@@ -24,13 +24,13 @@
 
         <!--Body-->
         <StackLayout Grid.Row="2">
-            <Label Text="Model View ViewModel (MVVM) is a pattern that pattern helps cleanly separate an application's business and presentation logic from its user interface (UI)."/>
+            <Editor Text="Model View ViewModel (MVVM) is a pattern that pattern helps cleanly separate an application's business and presentation logic from its user interface (UI)."/>
         </StackLayout>
 
         <!--Footer-->
         <StackLayout Grid.Row="3" Spacing="10" VerticalOptions="End">
             <Button Text="Save"/>
-            <Button Text="Cancel"/>
+            <Button Text="Cancel" BackgroundColor="Transparent" BorderColor="{ StaticResource Primary }" BorderWidth="1" TextColor="{StaticResource Primary}"/>
         </StackLayout>
     </Grid>
 </ContentPage>

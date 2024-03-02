@@ -2,8 +2,8 @@
 
 public partial class EditNotePage : ContentPage
 {
-	public EditNotePage()
-	{
-		InitializeComponent();
-	}
+    public EditNotePage()
+    {
+        InitializeComponent();
+    }
 }
