@@ -2,7 +2,15 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:conv="clr-namespace:NotesMaui.Converters"
+             xmlns:m="clr-namespace:NotesMaui.Models"
+             xmlns:vm="clr-namespace:NotesMaui.ViewModels"
+             x:DataType="vm:NoteViewModel"
              x:Class="NotesMaui.Views.MainPage">
+
+    <ContentPage.Resources>
+        <conv:DateConverter x:Key="dateConv"/>
+    </ContentPage.Resources>
 
     <ScrollView>
         <VerticalStackLayout
@@ -22,7 +30,6 @@
                     Text="Christian"
                     VerticalTextAlignment="Center"/>
 
-
                 <toolkit:AvatarView
                     Grid.Column="2"
                     ImageSource="dotnet_bot.png"
@@ -34,21 +41,26 @@
 
                 <CollectionView
                     x:Name="lstNotes"
-                    SelectionMode="Single"
-                    SelectionChanged="lstNotes_SelectionChanged">
+                    ItemsSource="{Binding Notes}">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical" Span="2" HorizontalItemSpacing="15" VerticalItemSpacing="15"/>
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Border Grid.Row="0" Grid.Column="0"
+                    <DataTemplate x:DataType="m:Note">
+                        <Border
                                 StrokeShape="RoundRectangle 10"
-                                Padding="15">
+                                Padding="10">
                             <Grid RowDefinitions="*,*,10" RowSpacing="15">
-                                 <Label Grid.Row="0" LineBreakMode="WordWrap" FontSize="Medium" Text="Change by Design"/>
-                                 <Label Grid.Row="1" LineBreakMode="WordWrap" Text="How design thinking transforms organization and inspires innovatio..."/>
-                                 <Label Grid.Row="2" FontSize="Micro" Text="Wed. 28 Feb" HorizontalOptions="End" VerticalOptions="End"/>
+                                <Label Grid.Row="0" FontSize="Header" MaxLines="2" LineBreakMode="TailTruncation" Text="{Binding Title}"/>
+                                <Label Grid.Row="1" FontSize="Small" LineBreakMode="TailTruncation" Text="{Binding Content}"/>
+                                <Label Grid.Row="2" FontSize="Micro" HorizontalOptions="End" Text="{Binding LastUpdateDate, Converter= {StaticResource dateConv}}"/>
                             </Grid>
+                            <Border.GestureRecognizers>
+                                   <TapGestureRecognizer
+                                       Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:NoteViewModel}},Path=SelectionChangedCommand}"
+                                       CommandParameter="{Binding .}" />
+                          
+                            </Border.GestureRecognizers>
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

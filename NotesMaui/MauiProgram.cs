@@ -1,5 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
 using CommunityToolkit.Maui;
+using NotesMaui.Services;
+using NotesMaui.ViewModels;
+using NotesMaui.Views;
 
 namespace NotesMaui;
 public static class MauiProgram
@@ -11,10 +14,18 @@ public static class MauiProgram
         {
             fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
             fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+            fonts.AddFont("fontello.ttf", "Icons");
         }).UseMauiCommunityToolkit();
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
+        builder.Services.AddTransient<MainPage>();
+        builder.Services.AddTransient<EditNotePage>();
+
+        builder.Services.AddSingleton<INoteService, NoteService>();
+        builder.Services.AddSingleton<EditNoteViewModel>();
+        builder.Services.AddSingleton<NoteViewModel>();
+
         return builder.Build();
     }
 }
