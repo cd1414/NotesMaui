@@ -23,7 +23,7 @@ public static class MauiProgram
         builder.Services.AddTransient<EditNotePage>();
 
         builder.Services.AddSingleton<INoteService, NoteService>();
-        builder.Services.AddSingleton<EditNoteViewModel>();
+        builder.Services.AddTransient<EditNoteViewModel>();
         builder.Services.AddSingleton<NoteViewModel>();
 
         return builder.Build();

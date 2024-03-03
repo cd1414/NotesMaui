@@ -64,6 +64,7 @@
 	  <None Remove="ViewModels\" />
 	  <None Remove="Converters\" />
 	  <None Remove="Services\" />
+	  <None Remove="Interfaces\" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Views\" />
@@ -71,6 +72,7 @@
 	  <Folder Include="ViewModels\" />
 	  <Folder Include="Converters\" />
 	  <Folder Include="Services\" />
+	  <Folder Include="Interfaces\" />
 	</ItemGroup>
 	<ItemGroup>
 	  <BundleResource Include="Resources\Fonts\fontello.ttf" />
