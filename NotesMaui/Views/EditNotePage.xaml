@@ -17,22 +17,30 @@
 
         <!-- Toolbar -->
         <HorizontalStackLayout HorizontalOptions="End" Spacing="5">
-            <Button FontFamily="Icons" Text="&#xE800;" BackgroundColor="Transparent" TextColor="Black" />
-            <Button FontFamily="Icons" Text="&#xE801;" BackgroundColor="Transparent" TextColor="Black"/>
+            <Button FontFamily="Icons"
+                    Text="&#xE800;"
+                    BackgroundColor="Transparent"
+                    TextColor="Black"
+                    Command="{Binding UndoCommand}" />
+            <Button FontFamily="Icons"
+                    Text="&#xE801;"
+                    BackgroundColor="Transparent"
+                    TextColor="Black"
+                    Command="{Binding RedoCommand}"/>
         </HorizontalStackLayout>
 
         <!--Header-->
 
         <StackLayout Grid.Row="1">
             <Editor FontSize="Title"
-                   Text="{Binding CurrentNote.Title}"/>
+                   Text="{Binding Title,Mode=TwoWay}"/>
             <Label FontSize="Micro"
-                   Text="{Binding CurrentNote.LastUpdateDate, Converter={StaticResource dateConv},ConverterParameter=D}"/>
+                   Text="{Binding LastUpdateDate, Converter={StaticResource dateConv},ConverterParameter=D}"/>
         </StackLayout>
 
         <!--Body-->
         <StackLayout Grid.Row="2">
-            <Editor Text="{Binding CurrentNote.Content}"/>
+            <Editor Text="{Binding Content}"/>
         </StackLayout>
 
         <!--Footer-->

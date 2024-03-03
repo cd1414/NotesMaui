@@ -1,4 +1,6 @@
 ﻿
+using System.Text.Json;
+
 namespace NotesMaui.Models;
 
 public class Note
@@ -8,4 +10,5 @@ public class Note
     public string Content { get; set; }
     public DateTime CreationDate { get; set; }
     public DateTime LastUpdateDate { get; set; }
+
 }
