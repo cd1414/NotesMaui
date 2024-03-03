@@ -1,5 +1,4 @@
-﻿
-using System.Text.Json;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace NotesMaui.Models;
 

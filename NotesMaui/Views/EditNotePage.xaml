@@ -12,7 +12,7 @@
 
     <Grid
         Padding="15"
-        RowDefinitions="auto,auto,*,*"
+        RowDefinitions="auto,auto,*,auto"
         RowSpacing="15">
 
         <!-- Toolbar -->
@@ -40,12 +40,12 @@
 
         <!--Body-->
         <StackLayout Grid.Row="2">
-            <Editor Text="{Binding Content}"/>
+            <Editor VerticalOptions="FillAndExpand" Text="{Binding Content}"/>
         </StackLayout>
 
         <!--Footer-->
         <StackLayout Grid.Row="3" Spacing="10" VerticalOptions="End">
-            <Button Text="Save"/>
+            <Button Text="Save" Command="{Binding SaveCommand}" />
             <Button Text="Cancel" BackgroundColor="Transparent" BorderColor="{ StaticResource Primary }" BorderWidth="1" TextColor="{StaticResource Primary}"/>
         </StackLayout>
     </Grid>

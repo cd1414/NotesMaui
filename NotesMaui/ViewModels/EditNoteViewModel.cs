@@ -10,6 +10,9 @@ namespace NotesMaui.ViewModels
     public partial class EditNoteViewModel : ObservableObject
     {
         [ObservableProperty]
+        int id;
+
+        [ObservableProperty]
         string title;
 
         [ObservableProperty]
@@ -18,10 +21,9 @@ namespace NotesMaui.ViewModels
         [ObservableProperty]
         DateTime lastUpdateDate;
 
-        bool isJustLoaded;
+        bool saveMemento;
         bool isLoading;
         bool isEditing;
-        IDispatcherTimer lastEditTimer;
 
         private INoteService notesService;
 
@@ -42,14 +44,16 @@ namespace NotesMaui.ViewModels
         {
             isLoading = true;
             isEditing = false;
-            isJustLoaded = false;
+            saveMemento = false;
 
             var note = notesService.GetById(noteId);
+
+            Id = note.Id;
             Title = note.Title;
             Content = note.Content;
             LastUpdateDate = note.LastUpdateDate;
 
-            isJustLoaded = true;
+            saveMemento = true;
             isEditing = false;
             isLoading = false;
         }
@@ -70,21 +74,10 @@ namespace NotesMaui.ViewModels
 
             if (redoList?.Count > 0) redoList.Clear();
 
-            if (isJustLoaded)
+            if (saveMemento)
             {
                 undoList.Add(CreateMemento());
-                isJustLoaded = false;
-            }
-            else if (lastEditTimer == null || !lastEditTimer.IsRunning)
-            {
-                lastEditTimer = Application.Current.Dispatcher.CreateTimer();
-                lastEditTimer.Interval = TimeSpan.FromSeconds(5);
-                lastEditTimer.Tick += (s, e) =>
-                {
-                    undoList.Add(CreateMemento());
-                    lastEditTimer.Stop();
-                };
-                lastEditTimer.Start();
+                saveMemento = false;
             }
 
             isEditing = true;
@@ -95,22 +88,20 @@ namespace NotesMaui.ViewModels
         {
             if (!CanUndo) return;
 
-            isLoading = true;
+            // save current state to the redo list
+            redoList.Add(CreateMemento());
+
             // get state to restore
             var stateToRestore = undoList.Last();
 
-            // save current state in the stack
-            redoList.Add(CreateMemento());
-
             // restore prev. state
+            isLoading = true;
             SetMemento(stateToRestore);
+            isLoading = false;
 
             // remove from undo list
-            if (undoList.Count > 0)
-                undoList.RemoveAt(undoList.Count - 1);
-
-
-            isLoading = false;
+            undoList.RemoveAt(undoList.Count - 1);
+            saveMemento = true;
         }
 
         [RelayCommand]
@@ -126,8 +117,10 @@ namespace NotesMaui.ViewModels
             undoList.Add(CreateMemento());
 
             // restore state
+            isLoading = true;
             if (stateToRestore != null)
                 SetMemento(stateToRestore);
+            isLoading = false;
 
             // remvoe from redo list
             if (redoList.Count > 0)
@@ -135,6 +128,29 @@ namespace NotesMaui.ViewModels
 
             isLoading = false;
 
+        }
+
+        [RelayCommand]
+        void Save()
+        {
+            var note = new Note
+            {
+                Id = Id,
+                Title = Title,
+                Content = Content
+            };
+
+            notesService.Save(note);
+
+            var currentNotes = notesService.GetAll();
+
+            Shell.Current.GoToAsync("..");
+        }
+
+        [RelayCommand]
+        void Cancel()
+        {
+            Shell.Current.GoToAsync("..");
         }
 
         public Memento CreateMemento()
@@ -157,8 +173,8 @@ namespace NotesMaui.ViewModels
 
         }
 
-        bool CanUndo => !isEditing | isLoading | undoList?.Count == 0;
-        bool CanRedo => !isEditing | isLoading | redoList?.Count == 0;
+        bool CanUndo => (isEditing | !isLoading) && undoList?.Count > 0;
+        bool CanRedo => (isEditing | !isLoading) && redoList?.Count > 0;
 
     }
 }

@@ -16,7 +16,8 @@
         <VerticalStackLayout
             Spacing="25"
             Padding="20,20"
-            VerticalOptions="Fill">
+            BackgroundColor="AliceBlue"
+            VerticalOptions="FillAndExpand">
 
             <Grid ColumnDefinitions="3*,*,*" >
                 <Label
@@ -37,28 +38,28 @@
                     />
             </Grid>
 
-            <SearchBar Placeholder="Search your notes..." BackgroundColor="Transparent"/>
+            <SearchBar Placeholder="Search your notes..." />
 
-                <CollectionView
-                    x:Name="lstNotes"
-                    ItemsSource="{Binding Notes}">
+            <CollectionView
+                x:Name="lstNotes"
+                ItemsSource="{Binding Notes}">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical" Span="2" HorizontalItemSpacing="15" VerticalItemSpacing="15"/>
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="m:Note">
-                        <Border
+                        <Border HeightRequest="200"
                                 StrokeShape="RoundRectangle 10"
                                 Padding="10">
-                            <Grid RowDefinitions="*,*,10" RowSpacing="15">
+                            <Grid RowDefinitions="auto,*,auto" RowSpacing="10">
                                 <Label Grid.Row="0" FontSize="Header" MaxLines="2" LineBreakMode="TailTruncation" Text="{Binding Title}"/>
-                                <Label Grid.Row="1" FontSize="Small" LineBreakMode="TailTruncation" Text="{Binding Content}"/>
+                                <Editor Grid.Row="1" FontSize="Small" IsReadOnly="True" Text="{Binding Content}"/>
                                 <Label Grid.Row="2" FontSize="Micro" HorizontalOptions="End" Text="{Binding LastUpdateDate, Converter= {StaticResource dateConv}}"/>
                             </Grid>
                             <Border.GestureRecognizers>
-                                   <TapGestureRecognizer
-                                       Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:NoteViewModel}},Path=SelectionChangedCommand}"
-                                       CommandParameter="{Binding .}" />
+                                    <TapGestureRecognizer
+                                        Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:NoteViewModel}},Path=SelectionChangedCommand}"
+                                        CommandParameter="{Binding .}" />
                           
                             </Border.GestureRecognizers>
                         </Border>
