@@ -5,7 +5,7 @@ namespace NotesMaui.Services
 {
     public interface INoteService
     {
-        ObservableCollection<Note> GetAll();
+        ObservableCollection<Note> GetAll(bool isPreview);
         Note GetById(int id);
         void Update(int id, Note entityUpdated);
         void Add(Note newEntity);
