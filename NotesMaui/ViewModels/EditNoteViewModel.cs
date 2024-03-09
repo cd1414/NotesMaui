@@ -3,11 +3,12 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using NotesMaui.Models;
 using NotesMaui.Services;
+using NotesMaui.Views;
 using Note = NotesMaui.Models.Note;
 
 namespace NotesMaui.ViewModels
 {
-    public partial class EditNoteViewModel : ObservableObject
+    public partial class EditNoteViewModel : ViewModelBase
     {
         [ObservableProperty]
         int id;
@@ -24,20 +25,34 @@ namespace NotesMaui.ViewModels
         bool saveMemento;
         bool isLoading;
         bool isEditing;
+        IDispatcherTimer autoSaveMemento;
 
         private INoteService notesService;
+        private NavigationService navigationService;
 
         private List<Memento> undoList = new();
         private List<Memento> redoList = new();
 
-        public EditNoteViewModel(INoteService _noteService)
+        [ObservableProperty]
+        bool undoEnabled;
+
+        public EditNoteViewModel(INoteService _noteService, NavigationService _navigationService)
         {
             notesService = _noteService;
+            navigationService = _navigationService;
+            UndoEnabled = false;
         }
 
-        public int noteId
+        public override Task OnNavigatingTo(Dictionary<string, object> parameter)
         {
-            set => LoadNoteById(value);
+            var id = 0;
+
+            if (parameter is not null && parameter.TryGetValue("Id", out _))
+                id = (int)parameter["Id"];
+
+            LoadNoteById(id);
+
+            return base.OnNavigatingTo(parameter);
         }
 
         private void LoadNoteById(int noteId)
@@ -46,7 +61,9 @@ namespace NotesMaui.ViewModels
             isEditing = false;
             saveMemento = false;
 
-            var note = notesService.GetById(noteId);
+            var note = noteId > 0
+                ? notesService.GetById(noteId)
+                : CreateNote();
 
             Id = note.Id;
             Title = note.Title;
@@ -68,11 +85,38 @@ namespace NotesMaui.ViewModels
             EnableUndoRedo();
         }
 
+        Note CreateNote()
+        {
+            var date = DateTime.Now;
+            return new()
+            {
+                CreationDate = date,
+                LastUpdateDate = date
+            };
+        }
+
+        void AutoSaveMemento_Tick(object sender, EventArgs e)
+        {
+            undoList.Add(CreateMemento());
+            autoSaveMemento.Stop();
+        }
+
+        void StartAutoSaveMemento()
+        {
+            autoSaveMemento = Application.Current.Dispatcher.CreateTimer();
+            autoSaveMemento.Interval = TimeSpan.FromSeconds(5);
+            autoSaveMemento.Tick += AutoSaveMemento_Tick;
+            autoSaveMemento.Start();
+        }
+
         void EnableUndoRedo()
         {
             if (isLoading) return;
 
             if (redoList?.Count > 0) redoList.Clear();
+
+            if (autoSaveMemento == null || !autoSaveMemento.IsRunning)
+                StartAutoSaveMemento();
 
             if (saveMemento)
             {
@@ -80,6 +124,7 @@ namespace NotesMaui.ViewModels
                 saveMemento = false;
             }
 
+            UndoEnabled = true;
             isEditing = true;
         }
 
@@ -131,7 +176,7 @@ namespace NotesMaui.ViewModels
         }
 
         [RelayCommand]
-        void Save()
+        async Task Save()
         {
             var note = new Note
             {
@@ -141,16 +186,29 @@ namespace NotesMaui.ViewModels
             };
 
             notesService.Save(note);
-
-            var currentNotes = notesService.GetAll();
-
-            Shell.Current.GoToAsync("..");
+            await navigationService.NavigateToPage<MainPage>(null);
         }
 
         [RelayCommand]
-        void Cancel()
+        async Task Cancel()
         {
-            Shell.Current.GoToAsync("..");
+            await navigationService.NavigateBack();
+        }
+
+        [RelayCommand]
+        async Task Delete(int id)
+        {
+            if (id == 0) return;
+
+            var action = await App.Current.MainPage.DisplayActionSheet("Do you want to delete this note?", "Cancel", "Delete Note");
+
+            if (action.Equals("Delete Note"))
+            {
+                notesService.Delete(id);
+                //await navigationService.NavigateToPage<MainPage>(null);
+
+                await navigationService.NavigateBack();
+            }
         }
 
         public Memento CreateMemento()

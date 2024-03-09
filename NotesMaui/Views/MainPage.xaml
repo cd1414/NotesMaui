@@ -16,7 +16,6 @@
         <VerticalStackLayout
             Spacing="25"
             Padding="20,20"
-            BackgroundColor="AliceBlue"
             VerticalOptions="FillAndExpand">
 
             <Grid ColumnDefinitions="3*,*,*" >
@@ -38,7 +37,10 @@
                     />
             </Grid>
 
-            <SearchBar Placeholder="Search your notes..." />
+            <SearchBar Placeholder="Search your notes..."/>
+
+            <Button Margin="-15, -20" BackgroundColor="Transparent" HorizontalOptions="End"  TextColor="Black" FontSize="Large"
+                        FontFamily="Icons" Text="&#xE804;"  Command="{Binding CreateNoteCommand}"/>
 
             <CollectionView
                 x:Name="lstNotes"
@@ -53,7 +55,7 @@
                                 Padding="10">
                             <Grid RowDefinitions="auto,*,auto" RowSpacing="10">
                                 <Label Grid.Row="0" FontSize="Header" MaxLines="2" LineBreakMode="TailTruncation" Text="{Binding Title}"/>
-                                <Editor Grid.Row="1" FontSize="Small" IsReadOnly="True" Text="{Binding Content}"/>
+                                <Editor Grid.Row="1" FontSize="Small" IsReadOnly="True" Text="{Binding Content }" />
                                 <Label Grid.Row="2" FontSize="Micro" HorizontalOptions="End" Text="{Binding LastUpdateDate, Converter= {StaticResource dateConv}}"/>
                             </Grid>
                             <Border.GestureRecognizers>

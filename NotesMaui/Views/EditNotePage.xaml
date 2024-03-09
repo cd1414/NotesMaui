@@ -14,19 +14,28 @@
         Padding="15"
         RowDefinitions="auto,auto,*,auto"
         RowSpacing="15">
-
         <!-- Toolbar -->
         <HorizontalStackLayout HorizontalOptions="End" Spacing="5">
+
             <Button FontFamily="Icons"
                     Text="&#xE800;"
-                    BackgroundColor="Transparent"
                     TextColor="Black"
-                    Command="{Binding UndoCommand}" />
+                    BackgroundColor="Transparent"
+                    Command="{Binding UndoCommand}"
+                    IsEnabled="False"/>
+
             <Button FontFamily="Icons"
                     Text="&#xE801;"
-                    BackgroundColor="Transparent"
                     TextColor="Black"
+                    BackgroundColor="Transparent"
                     Command="{Binding RedoCommand}"/>
+
+            <Button FontFamily="Icons"
+                    Text="&#xE805;"
+                    TextColor="Black"
+                    BackgroundColor="Transparent"
+                    Command="{Binding DeleteCommand}"
+                    CommandParameter="{Binding Id}"/>
         </HorizontalStackLayout>
 
         <!--Header-->
@@ -39,14 +48,16 @@
         </StackLayout>
 
         <!--Body-->
-        <StackLayout Grid.Row="2">
-            <Editor VerticalOptions="FillAndExpand" Text="{Binding Content}"/>
-        </StackLayout>
+        <ScrollView Grid.Row="2">
+            <VerticalStackLayout VerticalOptions="FillAndExpand">
+                <Editor VerticalOptions="FillAndExpand" AutoSize="TextChanges" Text="{Binding Content}" />
+            </VerticalStackLayout>
+        </ScrollView>
 
         <!--Footer-->
         <StackLayout Grid.Row="3" Spacing="10" VerticalOptions="End">
             <Button Text="Save" Command="{Binding SaveCommand}" />
-            <Button Text="Cancel" BackgroundColor="Transparent" BorderColor="{ StaticResource Primary }" BorderWidth="1" TextColor="{StaticResource Primary}"/>
+            <Button Text="Cancel" Command="{Binding CancelCommand}" BackgroundColor="Transparent" BorderColor="{ StaticResource Primary }" BorderWidth="1" TextColor="{StaticResource Primary}"/>
         </StackLayout>
     </Grid>
 </ContentPage>
