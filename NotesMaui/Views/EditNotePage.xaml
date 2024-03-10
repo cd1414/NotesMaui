@@ -4,6 +4,7 @@
              xmlns:vm="clr-namespace:NotesMaui.ViewModels"
              xmlns:conv="clr-namespace:NotesMaui.Converters"
              x:DataType="vm:EditNoteViewModel"
+             Shell.NavBarIsVisible="False"
              x:Class="NotesMaui.Views.EditNotePage">
 
     <ContentPage.Resources>

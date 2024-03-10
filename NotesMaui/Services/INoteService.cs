@@ -7,9 +7,8 @@ namespace NotesMaui.Services
     {
         ObservableCollection<Note> GetAll(bool isPreview);
         Note GetById(int id);
-        void Update(int id, Note entityUpdated);
-        void Add(Note newEntity);
         void Delete(int id);
         void Save(Note entity);
+        ObservableCollection<Note> Search(string filter);
     }
 }
