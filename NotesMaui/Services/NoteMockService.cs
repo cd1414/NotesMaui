@@ -12,6 +12,8 @@ namespace NotesMaui.Services
             new Note { Id = 3, Title = "MVC", Content = "Model View Controller pattern", CreationDate = DateTime.Now.AddDays(1), LastUpdateDate = DateTime.Now.AddDays(1) }
         };
 
+        private readonly int TitleMaxLength = 25;
+        private readonly int ContentMaxLength = 80;
 
         public void Add(Note newEntity)
         {
@@ -30,42 +32,34 @@ namespace NotesMaui.Services
             Notes.Remove(noteTarget);
         }
 
-        public ObservableCollection<Note> GetAll(bool isPreview = false)
+        ObservableCollection<Note> GetAllFiltered(bool isPreview = false, string filter = "")
         {
             // Mon. March 4th exists and issue with max length on Entry and Editor Controls
-
-            int titleMaxLength = 25;
-            int contentMaxLength = 80;
-
+            // if the content is greater than the max length received an error message
             return new ObservableCollection<Note>(
                     Notes.Select(note => new Note
                     {
                         Id = note.Id,
-                        Title = isPreview & note.Title?.Length > titleMaxLength ? $"{note.Title?[..titleMaxLength]}.." : note.Title,
-                        Content = isPreview & note.Content?.Length > contentMaxLength ? $"{note.Content?[..contentMaxLength]}.." : note.Content,
+                        Title = isPreview & note.Title?.Length > TitleMaxLength ? $"{note.Title?[..TitleMaxLength]}.." : note.Title,
+                        Content = isPreview & note.Content?.Length > ContentMaxLength ? $"{note.Content?[..ContentMaxLength]}.." : note.Content,
                         CreationDate = note.CreationDate,
                         LastUpdateDate = note.LastUpdateDate
-                    })
-                );
+                    }).Where(note =>
+                        filter.Length == 0 ||
+                        (note.Title.Contains(filter, StringComparison.InvariantCultureIgnoreCase) || note.Content.Contains(filter, StringComparison.InvariantCultureIgnoreCase))
+                ));
         }
 
+        public ObservableCollection<Note> GetAll(bool isPreview = false)
+            => GetAllFiltered(isPreview);
+
+        public ObservableCollection<Note> Search(string filter)
+            => GetAllFiltered(filter: filter);
 
         public Note GetById(int id)
-        {
-            return Notes.FirstOrDefault(note => note.Id == id);
-        }
+            => Notes.FirstOrDefault(note => note.Id == id);
 
-        public void Update(int id, Note entityUpdated)
-        {
-            if (id != entityUpdated.Id) return;
-
-            var noteTarget = Notes.FirstOrDefault(note => note.Id == id);
-            noteTarget.Title = entityUpdated.Title;
-            noteTarget.Content = entityUpdated.Content;
-            noteTarget.LastUpdateDate = DateTime.Now;
-        }
-
-        public void Update(Note entity)
+        void Update(Note entity)
         {
             var noteTarget = Notes.FirstOrDefault(note => note.Id == entity.Id);
             noteTarget.Title = entity.Title;

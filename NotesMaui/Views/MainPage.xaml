@@ -6,6 +6,7 @@
              xmlns:m="clr-namespace:NotesMaui.Models"
              xmlns:vm="clr-namespace:NotesMaui.ViewModels"
              x:DataType="vm:NoteViewModel"
+             Shell.NavBarIsVisible="False"
              x:Class="NotesMaui.Views.MainPage">
 
     <ContentPage.Resources>
@@ -15,10 +16,10 @@
     <ScrollView>
         <VerticalStackLayout
             Spacing="25"
-            Padding="20,20"
+            Padding="20"
             VerticalOptions="FillAndExpand">
 
-            <Grid ColumnDefinitions="3*,*,*" >
+            <Grid ColumnDefinitions="3*,*,*">
                 <Label
                     Grid.Column="0"
                     Text="My Notes"
@@ -37,7 +38,13 @@
                     />
             </Grid>
 
-            <SearchBar Placeholder="Search your notes..."/>
+            <SearchBar Placeholder="Search" Text="{Binding SearchCriteria}">
+                <SearchBar.Behaviors>
+                    <toolkit:EventToCommandBehavior 
+                        EventName="TextChanged" 
+                        Command="{Binding SearchNotesCommand}" />
+                </SearchBar.Behaviors>
+            </SearchBar>
 
             <Button Margin="-15, -20" BackgroundColor="Transparent" HorizontalOptions="End"  TextColor="Black" FontSize="Large"
                         FontFamily="Icons" Text="&#xE804;"  Command="{Binding CreateNoteCommand}"/>
@@ -62,15 +69,11 @@
                                     <TapGestureRecognizer
                                         Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:NoteViewModel}},Path=SelectionChangedCommand}"
                                         CommandParameter="{Binding .}" />
-                          
                             </Border.GestureRecognizers>
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-
         </VerticalStackLayout>
     </ScrollView>
-
 </ContentPage>
-

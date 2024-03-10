@@ -3,6 +3,7 @@ using CommunityToolkit.Maui;
 using NotesMaui.Services;
 using NotesMaui.ViewModels;
 using NotesMaui.Views;
+using DotNet.Meteor.HotReload.Plugin;
 
 namespace NotesMaui;
 public static class MauiProgram
@@ -17,7 +18,8 @@ public static class MauiProgram
             fonts.AddFont("fontello.ttf", "Icons");
         }).UseMauiCommunityToolkit();
 #if DEBUG
-        builder.Logging.AddDebug();
+        builder.Logging.AddDebug(); 
+        builder.EnableHotReload();
 #endif
         builder.Services.AddTransient<MainPage>();
         builder.Services.AddTransient<EditNotePage>();

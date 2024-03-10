@@ -205,9 +205,7 @@ namespace NotesMaui.ViewModels
             if (action.Equals("Delete Note"))
             {
                 notesService.Delete(id);
-                //await navigationService.NavigateToPage<MainPage>(null);
-
-                await navigationService.NavigateBack();
+                await navigationService.NavigateToPage<MainPage>(null);
             }
         }
 

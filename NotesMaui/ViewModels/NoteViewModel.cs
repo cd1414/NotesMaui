@@ -12,6 +12,10 @@ namespace NotesMaui.ViewModels
         [ObservableProperty]
         private ObservableCollection<Note> notes;
 
+        [ObservableProperty]
+        string searchCriteria;
+        IDispatcherTimer autoSearchTimer;
+
         private INoteService notesService;
         private NavigationService navigationService;
 
@@ -23,7 +27,6 @@ namespace NotesMaui.ViewModels
             navigationService = _navigationService;
             LoadNotes();
         }
-
 
         [RelayCommand]
         void LoadNotes()
@@ -51,6 +54,24 @@ namespace NotesMaui.ViewModels
         async Task CreateNote()
         {
             await navigationService.NavigateToPage<EditNotePage>(null);
+        }
+
+        [RelayCommand]
+        void SearchNotes()
+        {
+            if (autoSearchTimer == null)
+            {
+                autoSearchTimer = Application.Current.Dispatcher.CreateTimer();
+                autoSearchTimer.Interval = TimeSpan.FromSeconds(2);
+                autoSearchTimer.Tick += AutoSearch_Tick;
+            }
+
+            autoSearchTimer.Start();
+        }
+
+        void AutoSearch_Tick(object sender, EventArgs e)
+        {
+            Notes = new ObservableCollection<Note>(notesService.Search(SearchCriteria));
         }
     }
 }
