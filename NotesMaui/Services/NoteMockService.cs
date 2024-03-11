@@ -12,9 +12,6 @@ namespace NotesMaui.Services
             new Note { Id = 3, Title = "MVC", Content = "Model View Controller pattern", CreationDate = DateTime.Now.AddDays(1), LastUpdateDate = DateTime.Now.AddDays(1) }
         };
 
-        private readonly int TitleMaxLength = 25;
-        private readonly int ContentMaxLength = 80;
-
         public void Add(Note newEntity)
         {
             newEntity.Id = Notes.LastOrDefault(new Note { Id = 0 }).Id + 1;
@@ -32,16 +29,14 @@ namespace NotesMaui.Services
             Notes.Remove(noteTarget);
         }
 
-        ObservableCollection<Note> GetAllFiltered(bool isPreview = false, string filter = "")
+        ObservableCollection<Note> GetAllFiltered(string filter = "")
         {
-            // Mon. March 4th exists and issue with max length on Entry and Editor Controls
-            // if the content is greater than the max length received an error message
             return new ObservableCollection<Note>(
                     Notes.Select(note => new Note
                     {
                         Id = note.Id,
-                        Title = isPreview & note.Title?.Length > TitleMaxLength ? $"{note.Title?[..TitleMaxLength]}.." : note.Title,
-                        Content = isPreview & note.Content?.Length > ContentMaxLength ? $"{note.Content?[..ContentMaxLength]}.." : note.Content,
+                        Title = note.Title,
+                        Content = note.Content,
                         CreationDate = note.CreationDate,
                         LastUpdateDate = note.LastUpdateDate
                     }).Where(note =>
@@ -50,11 +45,11 @@ namespace NotesMaui.Services
                 ));
         }
 
-        public ObservableCollection<Note> GetAll(bool isPreview = false)
-            => GetAllFiltered(isPreview);
+        public ObservableCollection<Note> GetAll()
+            => GetAllFiltered();
 
         public ObservableCollection<Note> Search(string filter)
-            => GetAllFiltered(filter: filter);
+            => GetAllFiltered(filter);
 
         public Note GetById(int id)
             => Notes.FirstOrDefault(note => note.Id == id);

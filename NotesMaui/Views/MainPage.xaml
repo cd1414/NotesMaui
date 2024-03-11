@@ -12,6 +12,7 @@
 
     <ContentPage.Resources>
         <conv:DateConverter x:Key="dateConv"/>
+        <conv:WrapTextConverter x:Key="wrapTextConv"/>
     </ContentPage.Resources>
 
     <ScrollView>
@@ -72,8 +73,13 @@
                                 StrokeShape="RoundRectangle 10"
                                 Padding="10">
                             <Grid RowDefinitions="auto,*,auto" RowSpacing="10">
-                                <Label Grid.Row="0" FontSize="Header" MaxLines="2" LineBreakMode="TailTruncation" Text="{Binding Title}"/>
-                                <Editor Grid.Row="1" FontSize="Small" IsReadOnly="True" Text="{Binding Content }" />
+                                <Label 
+                                Grid.Row="0" 
+                                FontSize="Header" 
+                                MaxLines="2" 
+                                LineBreakMode="TailTruncation" 
+                                Text="{Binding Title, Converter={ StaticResource wrapTextConv }, ConverterParameter=10}"/>
+                                <Editor Grid.Row="1" FontSize="Small" IsReadOnly="True" Text="{Binding Content, Converter={ StaticResource wrapTextConv}, ConverterParameter=80 }" />
                                 <Label Grid.Row="2" FontSize="Micro" HorizontalOptions="End" Text="{Binding LastUpdateDate, Converter= {StaticResource dateConv}}"/>
                             </Grid>
                             <Border.GestureRecognizers>
