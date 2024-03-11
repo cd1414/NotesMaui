@@ -31,7 +31,7 @@ namespace NotesMaui.ViewModels
         [RelayCommand]
         void LoadNotes()
         {
-            Notes = new ObservableCollection<Note>(notesService.GetAll(true));
+            Notes = new ObservableCollection<Note>(notesService.GetAll());
         }
 
         [RelayCommand]
