@@ -33,14 +33,10 @@ namespace NotesMaui.ViewModels
         private List<Memento> undoList = new();
         private List<Memento> redoList = new();
 
-        [ObservableProperty]
-        bool undoEnabled;
-
         public EditNoteViewModel(INoteService _noteService, NavigationService _navigationService)
         {
             notesService = _noteService;
             navigationService = _navigationService;
-            UndoEnabled = false;
         }
 
         public override Task OnNavigatingTo(Dictionary<string, object> parameter)
@@ -123,8 +119,6 @@ namespace NotesMaui.ViewModels
                 undoList.Add(CreateMemento());
                 saveMemento = false;
             }
-
-            UndoEnabled = true;
             isEditing = true;
         }
 
@@ -167,12 +161,11 @@ namespace NotesMaui.ViewModels
                 SetMemento(stateToRestore);
             isLoading = false;
 
-            // remvoe from redo list
+            // remove from redo list
             if (redoList.Count > 0)
                 redoList.RemoveAt(redoList.Count - 1);
 
             isLoading = false;
-
         }
 
         [RelayCommand]
@@ -191,9 +184,7 @@ namespace NotesMaui.ViewModels
 
         [RelayCommand]
         async Task Cancel()
-        {
-            await navigationService.NavigateBack();
-        }
+            => await navigationService.NavigateBack();
 
         [RelayCommand]
         async Task Delete(int id)
@@ -211,13 +202,12 @@ namespace NotesMaui.ViewModels
 
         public Memento CreateMemento()
         {
-            var note = new Note
-            {
-                Title = Title,
-                Content = Content
-            };
-
-            return new Memento(JsonSerializer.Serialize(note));
+            return new Memento(
+                JsonSerializer.Serialize(new Note
+                {
+                    Title = Title,
+                    Content = Content
+                }));
         }
 
         public void SetMemento(Memento memento)
@@ -226,12 +216,10 @@ namespace NotesMaui.ViewModels
 
             Title = newState.Title;
             Content = newState.Content;
-
         }
 
         bool CanUndo => (isEditing | !isLoading) && undoList?.Count > 0;
         bool CanRedo => (isEditing | !isLoading) && redoList?.Count > 0;
-
     }
 }
 

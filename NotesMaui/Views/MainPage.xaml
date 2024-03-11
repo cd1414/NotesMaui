@@ -5,6 +5,7 @@
              xmlns:conv="clr-namespace:NotesMaui.Converters"
              xmlns:m="clr-namespace:NotesMaui.Models"
              xmlns:vm="clr-namespace:NotesMaui.ViewModels"
+             xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
              x:DataType="vm:NoteViewModel"
              Shell.NavBarIsVisible="False"
              x:Class="NotesMaui.Views.MainPage">
@@ -38,7 +39,10 @@
                     />
             </Grid>
 
-            <SearchBar Placeholder="Search" Text="{Binding SearchCriteria}">
+            <SearchBar 
+                Placeholder="Search" 
+                Text="{Binding SearchCriteria}"
+                ios:SearchBar.SearchBarStyle="Minimal">
                 <SearchBar.Behaviors>
                     <toolkit:EventToCommandBehavior 
                         EventName="TextChanged" 
@@ -46,8 +50,15 @@
                 </SearchBar.Behaviors>
             </SearchBar>
 
-            <Button Margin="-15, -20" BackgroundColor="Transparent" HorizontalOptions="End"  TextColor="Black" FontSize="Large"
-                        FontFamily="Icons" Text="&#xE804;"  Command="{Binding CreateNoteCommand}"/>
+            <Button 
+                Margin="-15, -20" 
+                BackgroundColor="Transparent" 
+                HorizontalOptions="End"  
+                TextColor="Black" 
+                FontSize="Large"
+                FontFamily="Icons" 
+                Text="&#xE804;"  
+                Command="{Binding CreateNoteCommand}"/>
 
             <CollectionView
                 x:Name="lstNotes"
