@@ -60,18 +60,21 @@ namespace NotesMaui.ViewModels
         void SearchNotes()
         {
             if (autoSearchTimer == null)
-            {
-                autoSearchTimer = Application.Current.Dispatcher.CreateTimer();
-                autoSearchTimer.Interval = TimeSpan.FromSeconds(2);
-                autoSearchTimer.Tick += AutoSearch_Tick;
-            }
-
+                autoSearchTimer = CreateTimer();
             autoSearchTimer.Start();
         }
 
         void AutoSearch_Tick(object sender, EventArgs e)
         {
             Notes = new ObservableCollection<Note>(notesService.Search(SearchCriteria));
+        }
+
+        IDispatcherTimer CreateTimer()
+        {
+            var timer = Application.Current.Dispatcher.CreateTimer();
+            timer.Interval = TimeSpan.FromSeconds(0.5);
+            timer.Tick += AutoSearch_Tick;
+            return timer;
         }
     }
 }

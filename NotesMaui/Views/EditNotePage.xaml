@@ -9,42 +9,54 @@
 
     <ContentPage.Resources>
         <conv:DateConverter x:Key="dateConv"/>
+        <Style x:Key="toolbarBtnStyle" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="Transparent"/>
+            <Setter Property="TextColor" Value="Black"/>
+            <Setter Property="FontFamily" Value="Icons"/>
+        </Style>
     </ContentPage.Resources>
 
     <Grid
-        Padding="15"
         RowDefinitions="auto,auto,*,auto"
+        Padding="15"
         RowSpacing="15">
+        
         <!-- Toolbar -->
-        <HorizontalStackLayout HorizontalOptions="End" Spacing="5">
+        <Grid Grid.Row="0" ColumnDefinitions="3*,*,*,*">
+            <Button 
+                Grid.Column="0"
+                Style="{StaticResource toolbarBtnStyle}"
+                FontSize="20"
+                HorizontalOptions="Start"
+                Text="&#xE808;"
+                Command="{Binding CancelCommand}"/>
 
-            <Button FontFamily="Icons"
-                    Text="&#xE800;"
-                    TextColor="Black"
-                    BackgroundColor="Transparent"
-                    Command="{Binding UndoCommand}"
-                    IsEnabled="False"/>
+            <Button 
+                Grid.Column="1"
+                Text="&#xE800;"
+                Style="{StaticResource toolbarBtnStyle}"
+                Command="{Binding UndoCommand}"/>
 
-            <Button FontFamily="Icons"
-                    Text="&#xE801;"
-                    TextColor="Black"
-                    BackgroundColor="Transparent"
-                    Command="{Binding RedoCommand}"/>
+            <Button 
+                Grid.Column="2"
+                Style="{StaticResource toolbarBtnStyle}"
+                Text="&#xE801;"
+                Command="{Binding RedoCommand}"/>
 
-            <Button FontFamily="Icons"
-                    Text="&#xE805;"
-                    TextColor="Black"
-                    BackgroundColor="Transparent"
-                    Command="{Binding DeleteCommand}"
-                    CommandParameter="{Binding Id}"/>
-        </HorizontalStackLayout>
+            <Button
+                Grid.Column="3"
+                Style="{StaticResource toolbarBtnStyle}"
+                Text="&#xE805;"
+                Command="{Binding DeleteCommand}"
+                CommandParameter="{Binding Id}"
+             />
+        </Grid>
 
         <!--Header-->
-
         <StackLayout Grid.Row="1">
             <Editor FontSize="Title"
                    Text="{Binding Title,Mode=TwoWay}"/>
-            <Label FontSize="Micro"
+            <Label FontSize="Micro" Padding="5"
                    Text="{Binding LastUpdateDate, Converter={StaticResource dateConv},ConverterParameter=D}"/>
         </StackLayout>
 
